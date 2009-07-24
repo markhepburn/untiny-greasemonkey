@@ -74,46 +74,46 @@ function convertLinks(){
     null);
 
   for (var i = 0; i < links.snapshotLength; i++) {
-	var link = links.snapshotItem(i);
-	for (var x in this.services){
-	  if (typeof(this.services[x]) == 'string') {
-		var linkStr = link + "";
-		var httpServ = 'http://' + services[x];
-		var httpWwwServ = 'http://www.' + services[x];
-		if ( (linkStr.indexOf(httpServ) == 0 ||
+    var link = links.snapshotItem(i);
+    for (var x in this.services){
+      if (typeof(this.services[x]) == 'string') {
+        var linkStr = link + "";
+        var httpServ = 'http://' + services[x];
+        var httpWwwServ = 'http://www.' + services[x];
+        if ( (linkStr.indexOf(httpServ) == 0 ||
               linkStr.indexOf(httpWwwServ) == 0)
                 &&
              ((linkStr != httpServ) &&
               (linkStr != httpWwwServ) &&
               (linkStr != (httpServ + '/')) &&
               (linkStr != (httpWwwServ + '/'))) ) {
-		  // Create untiny icon, with link (original to start with;
-		  // will be replaced with untiny'd version):
+          // Create untiny icon, with link (original to start with;
+          // will be replaced with untiny'd version):
           var icon_link = document.createElement('a');
           icon_link.setAttribute('href', linkStr);
           icon_link.setAttribute('id', 'untiny_link_id_' + i);
-		  var icon = document.createElement('img');
-		  icon.setAttribute('src','http://untiny.alzaid.ws/extra/untiny.png');
-		  icon.setAttribute('style', this.untinyIconStyle);
+          var icon = document.createElement('img');
+          icon.setAttribute('src','http://untiny.alzaid.ws/extra/untiny.png');
+          icon.setAttribute('style', this.untinyIconStyle);
 
           icon_link.appendChild(icon);
-		  link.parentNode.insertBefore(icon_link,link.nextSibling);
+          link.parentNode.insertBefore(icon_link,link.nextSibling);
 
-		  (function (old_href, iconElmnt, iconLinkElmnt) {
-			 GM_xmlhttpRequest({
-		       method:'GET',
-			   url: this.api_endpoint + 'extract?url=' + old_href +'&format=text',
-			   onload: function(o) {
-				 var new_href = o.responseText;
+          (function (old_href, iconElmnt, iconLinkElmnt) {
+             GM_xmlhttpRequest({
+               method:'GET',
+               url: this.api_endpoint + 'extract?url=' + old_href +'&format=text',
+               onload: function(o) {
+                 var new_href = o.responseText;
                  iconElmnt.setAttribute('title', new_href);
                  iconLinkElmnt.href = new_href;
-			   }
-			 });
-		   }) (link.href, icon, icon_link);
-		  break;
-		}
-	  }
-	}
+               }
+             });
+           }) (link.href, icon, icon_link);
+          break;
+        }
+      }
+    }
   }
 }
 
